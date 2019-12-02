@@ -5,10 +5,18 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/style.css">
     <title>Trivia</title>
 </head>
 <body>
-    <h1>Some title</h1>
-    <%=  %>
+    <div class="container">
+        <h1>Trivia</h1>
+        <% trivia.forEach((t) => { %>
+            <div class="post">
+                <img src="<%= t.img %>" alt="avatar image">
+                <p><%= t.question %> - <span style="font-weight: bold"> <%= t.answer %></span></p>
+            </div>
+        <%});%>
+    </div>
 </body>
 </html>
