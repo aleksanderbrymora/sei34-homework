@@ -1,15 +1,33 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
-const app = express();
+global.mta = require('./api/models/linesModel');
+const routes = require('./api/routes/linesRoutes');
 
-app.use(bodyParser.json());
-app.use(cors());
+mongoose.Promise = global.Promise;
+mongoose.connect(
+    'mongodb+srv://user123:user123@mta-cil4h.mongodb.net/test?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    },
+    () => console.log('Connected to DB')
+);
 
-const route = require('./api/getRoute');
-app.use('/api/getRoute', route);
+const port = 5000;
+const server = express();
 
-const port = process.env.PORT || 5000;
+server.use(cors());
+server.use(bodyParser.urlencoded({extended: true}));
+server.use(bodyParser.json());
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+routes(server);
+server.listen(port);
+
+server.use((req, res) => {
+    res.status(404).send({url: req.originalUrl + ' not found'});
+});
+
+console.log(`Server running at port ${port}`);
